@@ -9,9 +9,13 @@ class PeopleController < ApplicationController
   end
 
   def create
-    Person.create!(person_attributes)
+    @person = Person.new(person_attributes)
     
-    redirect_to people_path, notice: 'Successfully created entry'
+    if @person.save
+      redirect_to people_path, notice: 'Successfully created entry'
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
 
   private
