@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "people/index", type: :view do
   before(:each) do
-    Person.create(name: 'John Doe', phone_number: '123', email: 'john.doe@example.com', companies: [Company.create(name: 'Sony')] )
-    
+    Person.create(name: 'John Doe', phone_number: '123', email: 'john.doe@example.com', companies: [ Company.create(name: 'Sony') ])
+
     assign(:people, Person.all.page(params[:page]).per(10))
   end
 

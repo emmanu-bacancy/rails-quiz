@@ -8,7 +8,7 @@
 #
 #
 
-20.times do 
+20.times do
   Company.create(name: Faker::Company.name)
 end
 

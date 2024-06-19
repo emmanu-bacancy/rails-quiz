@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "companies/index", type: :view do
   before(:each) do
-    Company.create([{ name: 'Sony' },{ name: 'LG' }])
-    
+    Company.create([ { name: 'Sony' }, { name: 'LG' } ])
+
     assign(:companies, Company.all.page(params[:page]).per(10))
   end
 

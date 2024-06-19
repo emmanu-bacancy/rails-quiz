@@ -16,7 +16,7 @@ RSpec.describe PeopleController, type: :controller do
 
   describe 'POST create with valid params' do
     it 'Creates a record' do
-      expect{ post :create, params: { person: { name: 'John Doe', phone_number: '123', email: 'john.doe@example.com' } } }.to change{ Person.count }.by(1)
+      expect { post :create, params: { person: { name: 'John Doe', phone_number: '123', email: 'john.doe@example.com' } } }.to change { Person.count }.by(1)
     end
 
     it 'has status found' do
@@ -28,7 +28,7 @@ RSpec.describe PeopleController, type: :controller do
     before do
       post :create, params: { person: { phone_number: '123', email: 'John Doe' } }
     end
-    
+
     it { is_expected.to have_http_status(:unprocessable_entity) }
   end
 end

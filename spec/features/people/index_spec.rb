@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe 'Listing people', type: :feature do
-  before do 
+  before do
     Person.create(
       name: 'Foo Bar',
       phone_number: '123',
       email: 'john.doe@example.com',
-      companies: [Company.create(name: 'Sony')]
+      companies: [ Company.create(name: 'Sony') ]
     )
   end
 
@@ -25,5 +25,4 @@ RSpec.describe 'Listing people', type: :feature do
 
     expect(page).to have_field :person_name
   end
-
 end

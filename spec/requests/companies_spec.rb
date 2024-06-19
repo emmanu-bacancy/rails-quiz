@@ -13,7 +13,6 @@
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/companies", type: :request do
-  
   # Company. As you add validations to Company, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
@@ -86,7 +85,7 @@ RSpec.describe "/companies", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        { name: 'LG'}
+        { name: 'LG' }
       }
 
       it "updates the requested company" do

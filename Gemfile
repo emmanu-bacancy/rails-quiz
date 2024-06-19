@@ -12,7 +12,7 @@ gem "stimulus-rails"
 gem "cssbundling-rails"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
-gem 'slim-rails'
+gem "slim-rails"
 gem "jsbundling-rails"
 
 group :development, :test do
@@ -20,6 +20,9 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
   gem "rspec-rails"
   gem "pry-rails"
+
+  # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
+  gem "rubocop-rails-omakase", require: false
 end
 
 group :development do
@@ -41,4 +44,4 @@ end
 
 # Use Redis for Action Cable
 gem "redis", "~> 4.0"
-gem 'kaminari'
+gem "kaminari"
