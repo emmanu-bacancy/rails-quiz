@@ -1,5 +1,14 @@
 h2 Creating an entry
 
+- if @person.errors.any?
+  .alert.alert-danger
+    h3
+      | Validation errors:
+    ul
+      - @person.errors.full_messages.each do |message|
+        li
+          = message
+          
 = form_for @person, class: 'row' do |f|
   .col-auto
     = f.label :name, class: 'form-label'
