@@ -9,17 +9,15 @@ class PeopleController < ApplicationController
   end
 
   def create
-    if Person.create(person_attributes)
-      redirect_to people_path, notice: 'Successfully created entry'
-    else
-      render :create, alert: 'Unsuccessfully created entry'
-    end
+    Person.create!(person_attributes)
+    
+    redirect_to people_path, notice: 'Successfully created entry'
   end
 
   private
 
   def person_attributes
-    params.require(:person).permit(:name, :email, :phone)
+    params.require(:person).permit(:name, :email, :phone_number)
   end
 
 end
