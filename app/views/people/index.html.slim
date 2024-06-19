@@ -7,7 +7,7 @@ table.table
       th[scope="col"] Name
       th[scope="col"] Phone number
       th[scope="col"] Email address
-      th[scope="col"] Company
+      th[scope="col"] Companies
   tbody
     - @people.each do |person|
       tr
@@ -15,7 +15,7 @@ table.table
         td= person.try(:name)
         td= person.try(:phone_number)
         td= person.try(:email)
-        td= person.try(:company).try(:name)
+        td= person.companies.map(&:name).join(', ')
 
 = paginate @people
 

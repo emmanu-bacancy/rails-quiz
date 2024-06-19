@@ -12,7 +12,11 @@
 #
 
 class Person < ApplicationRecord
+  attr_accessor :email_confirmation
+
   validates :name, presence: true
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }, confirmation: true
   
-  belongs_to :company, optional: true
+  has_many :company_people
+  has_many :companies, through: :company_people
 end

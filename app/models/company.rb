@@ -9,5 +9,6 @@
 #
 
 class Company < ApplicationRecord
-  has_many :people
+  has_many :company_people
+  has_many :people, through: :company_people
 end

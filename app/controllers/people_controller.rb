@@ -1,7 +1,7 @@
 class PeopleController < ApplicationController
 
   def index
-    @people = Person.includes(:company).page(params[:page]).per(10)
+    @people = Person.includes(:companies).page(params[:page]).per(10)
   end
 
   def new
@@ -21,7 +21,7 @@ class PeopleController < ApplicationController
   private
 
   def person_attributes
-    params.require(:person).permit(:name, :email, :phone_number)
+    params.require(:person).permit(:name, :email, :phone_number, :email_confirmation, company_ids: [])
   end
 
 end
