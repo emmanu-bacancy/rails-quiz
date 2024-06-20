@@ -1,5 +1,7 @@
 class CompaniesController < ApplicationController
   before_action :set_company, only: %i[ show edit update destroy ]
+  before_action :set_people, only: %i[new edit create update]
+
   http_basic_authenticate_with name: "dhh", password: "secret", only: :create_companies
   protect_from_forgery with: :null_session, only: :create_companies # Disable CSRF protection for JSON requests
 
@@ -73,20 +75,14 @@ class CompaniesController < ApplicationController
     end
   end
 
-  # DELETE /companies/1 or /companies/1.json
-  def destroy
-    @company.destroy
-
-    respond_to do |format|
-      format.html { redirect_to companies_url, notice: "Company was successfully destroyed." }
-      format.json { head :no_content }
-    end
-  end
-
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_company
       @company = Company.find(params[:id])
+    end
+
+    def set_people
+      @people = Person.select(:id, :name)
     end
 
     # Only allow a list of trusted parameters through.
