@@ -1,2 +1,2 @@
-json.extract! company, :id, :name, :created_at, :updated_at
-json.url company_url(company, format: :json)
+json.extract! company, :name
+json.partial! "shared/pagination", collection: @companies

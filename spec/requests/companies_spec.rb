@@ -24,10 +24,24 @@ RSpec.describe "/companies", type: :request do
   }
 
   describe "GET /index" do
+    before do
+     Company.create!([ { name: "Bosch" }, { name: "Tata" } ])
+   end
+
     it "renders a successful response" do
-      Company.create! valid_attributes
       get companies_url
       expect(response).to be_successful
+    end
+
+    it "returns companies matching search query" do
+      get "/companies", params: { search: 'tata' },
+                                    headers: { "CONTENT_TYPE" => "application/json",
+                                               "ACCEPT" => "application/json" }
+      expect(response).to be_successful
+
+      json_response = JSON.parse(response.body)
+      expect(json_response.size).to eq(1)
+      expect(json_response.first["name"]).to eq("Tata")
     end
   end
 
@@ -78,6 +92,62 @@ RSpec.describe "/companies", type: :request do
       it "renders a successful response (i.e. to display the 'new' template)" do
         post companies_url, params: { company: invalid_attributes }
         expect(response).not_to be_successful
+      end
+    end
+  end
+
+  describe "POST /create_companies" do
+    context "with valid parameters" do
+      let(:valid_params) do
+        {
+          companies: [
+            { name: "Company A" },
+            { name: "Company B" }
+          ]
+        }
+      end
+
+      it "creates new companies" do
+        expect {
+          post "/create_companies", params: valid_params.to_json,
+                                    headers: { "CONTENT_TYPE" => "application/json",
+                                               "ACCEPT" => "application/json" },
+                                    env: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("dhh", "secret") }
+        }.to change(Company, :count).by(2)
+
+        expect(response).to have_http_status(:created)
+        expect(response.content_type).to include("application/json")
+
+        json_response = JSON.parse(response.body)
+        expect(json_response.size).to eq(2)
+        expect(json_response.first["name"]).to eq("Company A")
+        expect(json_response.second["name"]).to eq("Company B")
+      end
+    end
+
+    context "with invalid parameters" do
+      let(:invalid_params) do
+        {
+          companies: [
+            { name: "Company A" },
+            { name: nil }
+          ]
+        }
+      end
+
+      it "returns unprocessable_entity status" do
+        post "/create_companies", params: invalid_params.to_json,
+                                  headers: { "CONTENT_TYPE" => "application/json",
+                                             "ACCEPT" => "application/json" },
+                                  env: { 'HTTP_AUTHORIZATION' => ActionController::HttpAuthentication::Basic.encode_credentials("dhh", "secret") }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.content_type).to include("application/json")
+
+        json_response = JSON.parse(response.body)
+        expect(json_response).to include("error")
+        expect(json_response["error"]).to be_a(Array)
+        expect(json_response["error"]).to include("Name can't be blank")
       end
     end
   end

@@ -1,10 +1,20 @@
 class CompaniesController < ApplicationController
-  before_action :set_company, only: %i[ show edit update ]
+  before_action :set_company, only: %i[ show edit update destroy ]
   before_action :set_people, only: %i[new edit create update]
+
+  http_basic_authenticate_with name: "dhh", password: "secret", only: :create_companies
+  protect_from_forgery with: :null_session, only: :create_companies # Disable CSRF protection for JSON requests
 
   # GET /companies or /companies.json
   def index
-    @companies = Company.includes(:people).page(params[:page]).per(10)
+    @companies = Company.includes(:people)
+
+    if params[:search].present?
+      search_term = params[:search].downcase
+      @companies = @companies.where("LOWER(name) LIKE ?", "%#{search_term}%")
+    end
+
+    @companies = @companies.page(params[:page]).per(10)
   end
 
   # GET /companies/1 or /companies/1.json
@@ -35,6 +45,23 @@ class CompaniesController < ApplicationController
     end
   end
 
+  def create_companies
+    companies_params = params.require(:companies)
+
+    created_companies = []
+    companies_params.each do |company_param|
+      company = Company.new(company_params(company_param))
+      if company.save
+        created_companies << company
+      else
+        render json: { error: company.errors.full_messages }, status: :unprocessable_entity
+        return
+      end
+    end
+
+    render json: created_companies, status: :created
+  end
+
   # PATCH/PUT /companies/1 or /companies/1.json
   def update
     respond_to do |format|
@@ -59,7 +86,11 @@ class CompaniesController < ApplicationController
     end
 
     # Only allow a list of trusted parameters through.
-    def company_params
-      params.require(:company).permit(:name, person_ids: [])
+    def company_params(company_param = nil)
+      if company_param
+        company_param.permit(:name)
+      else
+        params.require(:company).permit(:name, person_ids: [])
+      end
     end
 end
