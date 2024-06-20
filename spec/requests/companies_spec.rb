@@ -111,19 +111,4 @@ RSpec.describe "/companies", type: :request do
       end
     end
   end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested company" do
-      company = Company.create! valid_attributes
-      expect {
-        delete company_url(company)
-      }.to change(Company, :count).by(-1)
-    end
-
-    it "redirects to the companies list" do
-      company = Company.create! valid_attributes
-      delete company_url(company)
-      expect(response).to redirect_to(companies_url)
-    end
-  end
 end

@@ -1,4 +1,6 @@
 class PeopleController < ApplicationController
+  before_action :set_companies, only: %i[new create]
+
   def index
     @people = Person.includes(:companies).page(params[:page]).per(10)
   end
@@ -18,6 +20,10 @@ class PeopleController < ApplicationController
   end
 
   private
+
+  def set_companies
+    @companies = Company.select(:id, :name)
+  end
 
   def person_attributes
     params.require(:person).permit(:name, :email, :phone_number, :email_confirmation, company_ids: [])
