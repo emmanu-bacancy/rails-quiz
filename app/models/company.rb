@@ -9,5 +9,8 @@
 #
 
 class Company < ApplicationRecord
-  has_many :people
+  validates :name, presence: true
+
+  has_many :company_people
+  has_many :people, through: :company_people
 end

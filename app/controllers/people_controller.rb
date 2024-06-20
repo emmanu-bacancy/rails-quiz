@@ -1,7 +1,8 @@
 class PeopleController < ApplicationController
+  before_action :set_companies, only: %i[new create]
 
   def index
-    @people = Person.includes(:company).page(params[:page]).per(10)
+    @people = Person.includes(:companies).page(params[:page]).per(10)
   end
 
   def new
@@ -10,9 +11,9 @@ class PeopleController < ApplicationController
 
   def create
     @person = Person.new(person_attributes)
-    
+
     if @person.save
-      redirect_to people_path, notice: 'Successfully created entry'
+      redirect_to people_path, notice: "Successfully created entry"
     else
       render :new, status: :unprocessable_entity
     end
@@ -20,9 +21,11 @@ class PeopleController < ApplicationController
 
   private
 
-  def person_attributes
-    params.require(:person).permit(:name, :email, :phone_number)
+  def set_companies
+    @companies = Company.select(:id, :name)
   end
 
+  def person_attributes
+    params.require(:person).permit(:name, :email, :phone_number, :email_confirmation, company_ids: [])
+  end
 end
-

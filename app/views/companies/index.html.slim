@@ -1,0 +1,19 @@
+h2 Viewing companies
+
+table.table
+  thead
+    tr
+      th[scope="col"] ID
+      th[scope="col"] Name
+      th[scope="col"] People Count
+
+  tbody
+    - @companies.each do |company|
+      tr
+        th[scope="row"]= company&.id
+        td= company.try(:name)
+        td= company.people.count
+        td = link_to 'Show', company
+        td = link_to 'Edit', edit_company_path(company)
+
+= paginate @companies

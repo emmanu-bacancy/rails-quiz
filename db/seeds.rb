@@ -7,11 +7,16 @@
 #   Character.create(name: "Luke", movie: movies.first)
 #
 #
+
+20.times do
+  Company.create(name: Faker::Company.name)
+end
+
 100.times do
-  Person.create({
+  Person.create!({
     name: Faker::Name.name,
     phone_number: Faker::PhoneNumber.phone_number,
     email: Faker::Internet.email,
-    company: Company.create(name: Faker::Company.name)
+    companies: Company.order('RANDOM()').limit(5)
   })
 end
