@@ -40,7 +40,6 @@ RSpec.describe "/companies", type: :request do
       expect(response).to be_successful
 
       json_response = JSON.parse(response.body)
-      puts json_response
       expect(json_response.size).to eq(1)
       expect(json_response.first["name"]).to eq("Tata")
     end
